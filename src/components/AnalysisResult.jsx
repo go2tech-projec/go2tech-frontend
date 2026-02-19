@@ -3,7 +3,7 @@ const AnalysisResult = ({ result }) => {
     return null;
   }
 
-  const { student_info, courses, domain_scores, strengths, job_recommendations, summary } = result;
+  const { student_info, courses, domain_scores, strengths, job_recommendations, summary, unmatched_courses } = result;
 
   const getMedalEmoji = (index) => {
     const medals = ['🥇', '🥈', '🥉'];
@@ -174,6 +174,45 @@ const AnalysisResult = ({ result }) => {
           </div>
         </div>
       </div>
+
+      {/* Unmatched Courses */}
+      {unmatched_courses && unmatched_courses.length > 0 && (
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
+          <h2 className="text-xl font-bold text-gray-600 mb-1">
+            รายวิชาที่ไม่พบในฐานข้อมูล
+            <span className="ml-2 text-base font-normal text-gray-400">({unmatched_courses.length} วิชา)</span>
+          </h2>
+          <p className="text-sm text-gray-400 mb-4">
+            รายวิชาเหล่านี้ไม่ถูกนำมาคำนวณทักษะ เนื่องจากไม่มีข้อมูลใน Skill Mapping
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="border-b border-gray-300">
+                  <th className="pb-2 text-sm font-semibold text-gray-500">รหัสวิชา</th>
+                  <th className="pb-2 text-sm font-semibold text-gray-500">ชื่อวิชา</th>
+                  <th className="pb-2 text-sm font-semibold text-gray-500 text-center">หน่วยกิต</th>
+                  <th className="pb-2 text-sm font-semibold text-gray-500 text-center">เกรด</th>
+                </tr>
+              </thead>
+              <tbody>
+                {unmatched_courses.map((course, i) => (
+                  <tr key={i} className="border-b border-gray-100 hover:bg-gray-100">
+                    <td className="py-2 text-sm font-mono text-gray-500">{course.course_code}</td>
+                    <td className="py-2 text-sm text-gray-600">{course.course_name}</td>
+                    <td className="py-2 text-sm text-gray-500 text-center">{course.credits}</td>
+                    <td className="py-2 text-center">
+                      <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold text-gray-500 bg-gray-200">
+                        {course.grade}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
