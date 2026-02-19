@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import FileUpload from './components/FileUpload';
 import AnalysisResult from './components/AnalysisResult';
+import DebugView from './components/DebugView';
 import { transcriptAPI } from './services/api';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [error, setError] = useState(null);
+  const [teacherMode, setTeacherMode] = useState(false);
 
   const handleFileSelect = async (file) => {
     setIsLoading(true);
@@ -14,7 +16,10 @@ function App() {
     setAnalysisResult(null);
 
     try {
-      const result = await transcriptAPI.analyzeTranscript(file);
+      // Use debug API if teacher mode is enabled
+      const result = teacherMode
+        ? await transcriptAPI.analyzeTranscriptDebug(file)
+        : await transcriptAPI.analyzeTranscript(file);
 
       if (result.success) {
         setAnalysisResult(result);
@@ -33,12 +38,33 @@ function App() {
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-gray-800">
-            GO2TECH
-          </h1>
-          <p className="text-gray-600 mt-1">
-            Transcript Analysis - Tech Job Platform
-          </p>
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800">
+                GO2TECH
+              </h1>
+              <p className="text-gray-600 mt-1">
+                Transcript Analysis - Tech Job Platform
+              </p>
+            </div>
+
+            {/* Teacher Mode Toggle */}
+            <div className="flex items-center space-x-3">
+              <span className="text-sm text-gray-600">Teacher Mode</span>
+              <button
+                onClick={() => setTeacherMode(!teacherMode)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+                  teacherMode ? 'bg-amber-600' : 'bg-gray-200'
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    teacherMode ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -90,7 +116,13 @@ function App() {
 
           {/* Analysis Result */}
           {analysisResult && !isLoading && (
-            <AnalysisResult result={analysisResult} />
+            <>
+              <AnalysisResult result={analysisResult} />
+              {/* Debug View (Teacher Mode) */}
+              {teacherMode && analysisResult.debug_info && (
+                <DebugView debugInfo={analysisResult.debug_info} />
+              )}
+            </>
           )}
         </div>
       </main>

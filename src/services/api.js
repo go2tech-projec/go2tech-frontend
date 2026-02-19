@@ -26,6 +26,14 @@ export const transcriptAPI = {
     return response.data;
   },
 
+  // Upload and analyze transcript with debug info (for teachers)
+  analyzeTranscriptDebug: async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await api.post('/transcript/analyze-debug', formData);
+    return response.data;
+  },
+
   // Analyze previously uploaded transcript
   analyzeUploadedTranscript: async (fileId) => {
     const response = await api.get(`/transcript/analyze/${fileId}`);
