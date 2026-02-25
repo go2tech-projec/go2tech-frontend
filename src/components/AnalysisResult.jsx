@@ -270,20 +270,20 @@ const AnalysisResult = ({ result }) => {
       {unmatched_courses && unmatched_courses.length > 0 && (
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
           <h2 className="text-xl font-bold text-gray-600 mb-1">
-            รายวิชาที่ไม่พบในฐานข้อมูล
-            <span className="ml-2 text-base font-normal text-gray-400">({unmatched_courses.length} วิชา)</span>
+            Courses Not Found in Database
+            <span className="ml-2 text-base font-normal text-gray-400">({unmatched_courses.length} courses)</span>
           </h2>
           <p className="text-sm text-gray-400 mb-4">
-            รายวิชาเหล่านี้ไม่ถูกนำมาคำนวณทักษะ เนื่องจากไม่มีข้อมูลใน Skill Mapping
+            These courses were not included in the skill calculation because they are general electives (GenEd) or newly added courses that have no data in the Skill Mapping database.
           </p>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b border-gray-300">
-                  <th className="pb-2 text-sm font-semibold text-gray-500">รหัสวิชา</th>
-                  <th className="pb-2 text-sm font-semibold text-gray-500">ชื่อวิชา</th>
-                  <th className="pb-2 text-sm font-semibold text-gray-500 text-center">หน่วยกิต</th>
-                  <th className="pb-2 text-sm font-semibold text-gray-500 text-center">เกรด</th>
+                  <th className="pb-2 text-sm font-semibold text-gray-500">Code</th>
+                  <th className="pb-2 text-sm font-semibold text-gray-500">Course Name</th>
+                  <th className="pb-2 text-sm font-semibold text-gray-500 text-center">Cr.</th>
+                  <th className="pb-2 text-sm font-semibold text-gray-500 text-center">Grade</th>
                 </tr>
               </thead>
               <tbody>
